@@ -12,6 +12,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -25,12 +26,11 @@ public class PedidoEntity {
     @NotNull
     @NotBlank
     @Size(max = 255)
+    @Pattern(regexp = "\\d{2}-\\d{2}-\\d{4}", message = "El formato de fecha debe ser 'dd-MM-yyyy'")
     private String fecha_pedido;
 
-    @NotNull
-    @NotBlank
-    @Size(max = 255)
-    private String estado_pedido;
+ 
+    private boolean estado_pedido;
 
 
     @ManyToOne
@@ -46,13 +46,13 @@ public class PedidoEntity {
         productos = new java.util.ArrayList<>();
     }
 
-    public PedidoEntity(Long id, String fecha_pedido, String estado_pedido) {
+    public PedidoEntity(Long id, String fecha_pedido, boolean estado_pedido) {
         this.id = id;
         this.fecha_pedido = fecha_pedido;
         this.estado_pedido = estado_pedido;
         }
 
-    public PedidoEntity(String fecha_pedido, String estado_pedido) {
+    public PedidoEntity(String fecha_pedido, boolean estado_pedido) {
         this.fecha_pedido = fecha_pedido;
         this.estado_pedido = estado_pedido;
     }
@@ -73,11 +73,11 @@ public class PedidoEntity {
         this.fecha_pedido = fecha_pedido;
     }
 
-    public String getEstado_pedido() {
+    public boolean getEstado_pedido() {
         return estado_pedido;
     }
 
-    public void setEstado_pedido(String estado_pedido) {
+    public void setEstado_pedido(boolean estado_pedido) {
         this.estado_pedido = estado_pedido;
     }
 

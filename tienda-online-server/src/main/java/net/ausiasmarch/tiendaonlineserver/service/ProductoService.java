@@ -5,14 +5,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import net.ausiasmarch.tiendaonlineserver.entity.PedidoEntity;
 import net.ausiasmarch.tiendaonlineserver.entity.ProductoEntity;
 import net.ausiasmarch.tiendaonlineserver.exception.ResourceNotFoundException;
+import net.ausiasmarch.tiendaonlineserver.repository.PedidoRepository;
 import net.ausiasmarch.tiendaonlineserver.repository.ProductoRepository;
 
 @Service
 public class ProductoService {
     @Autowired
     ProductoRepository oProductoRepository;
+     @Autowired
+    PedidoRepository oPedidoRepository;
 
     public ProductoEntity get(Long id) {
         return oProductoRepository.findById(id)
@@ -42,10 +46,21 @@ public class ProductoService {
 
    
 public Long populate(Integer amount) {
+    PedidoEntity pedidoporDefecto = oPedidoRepository.findById(1L)
+            .orElseThrow(() -> new IllegalArgumentException("No se encontró un pedido por defecto con ID 1"));
     for (int i = 0; i < amount; i++) {
-        ProductoEntity producto = new ProductoEntity("name" + i+ i, 0.0f, i); 
+        ProductoEntity producto = new ProductoEntity();
+         producto.setPedido(pedidoporDefecto);
+         producto.setName("Manzana Golden");
+        
+         producto.setPrize((float) 2.85);
+         producto.setStock(48);
+      
+
         oProductoRepository.save(producto);
     }
-    return oProductoRepository.count();
+    return amount.longValue();
 }
 }
+
+  

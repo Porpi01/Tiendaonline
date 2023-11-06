@@ -7,14 +7,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import net.ausiasmarch.tiendaonlineserver.entity.PedidoEntity;
-
+import net.ausiasmarch.tiendaonlineserver.entity.UserEntity;
 import net.ausiasmarch.tiendaonlineserver.exception.ResourceNotFoundException;
 import net.ausiasmarch.tiendaonlineserver.repository.PedidoRepository;
+import net.ausiasmarch.tiendaonlineserver.repository.UserRepository;
 
 @Service
 public class PedidoService {
     @Autowired
     PedidoRepository oPedidoRepository;
+    @Autowired
+    UserRepository oUserRepository;
 
     public PedidoEntity get(Long id) {
         return oPedidoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido not found"));
@@ -38,10 +41,21 @@ public class PedidoService {
         return oPedidoRepository.findAll(oPageable);
     }
 
-    public Long populate(Integer amount) {
-        for (int i = 0; i < amount; i++) {
-            oPedidoRepository.save(new PedidoEntity("fecha_pedido" + i, "estado_pedido" + i));
-        }
-        return oPedidoRepository.count();
+   public Long populate(Integer amount) {
+
+    UserEntity clientePorDefecto = oUserRepository.findById(1L)
+            .orElseThrow(() -> new IllegalArgumentException("No se encontró un cliente por defecto con ID 1"));
+
+    for (int i = 0; i < amount; i++) {
+        PedidoEntity pedido = new PedidoEntity();
+
+        pedido.setUser(clientePorDefecto);
+        pedido.setFecha_pedido("06-11-2023"); 
+        pedido.setEstado_pedido(false); 
+
+        oPedidoRepository.save(pedido);
     }
+
+    return amount.longValue();
+}
 }
