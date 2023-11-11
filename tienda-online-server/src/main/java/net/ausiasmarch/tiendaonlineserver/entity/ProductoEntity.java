@@ -24,7 +24,7 @@ public class ProductoEntity {
     
     @NotNull
     @NotBlank
-    @Size(max=255)
+    @Size(min=3,max=255)
     String name;
 
 

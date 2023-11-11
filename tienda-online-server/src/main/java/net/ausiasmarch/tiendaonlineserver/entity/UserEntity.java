@@ -41,7 +41,7 @@ public class UserEntity {
     @Email
     private String email;
 
-    @Size(max = 255)
+    @Size(min = 10, max = 255)
     private String address;
 
     @NotNull
