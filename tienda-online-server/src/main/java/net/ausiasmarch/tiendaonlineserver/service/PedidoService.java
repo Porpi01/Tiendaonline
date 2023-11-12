@@ -1,6 +1,8 @@
 package net.ausiasmarch.tiendaonlineserver.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,6 +32,10 @@ public class PedidoService {
 
     public PedidoEntity update(PedidoEntity pedidoEntity) {
         return oPedidoRepository.save(pedidoEntity);
+    }
+
+    public long obtenerNumeroTotalDePedidos() {
+        return oPedidoRepository.count();
     }
 
     public Long delete(Long id) {

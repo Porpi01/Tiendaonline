@@ -1,8 +1,11 @@
 package net.ausiasmarch.tiendaonlineserver.api;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -48,6 +51,12 @@ public class PedidoApi {
     @GetMapping("")
     public ResponseEntity<Page<PedidoEntity>> getPage(Pageable oPageable) {
         return ResponseEntity.ok(oPedidoService.getPage(oPageable));
+    }
+
+    @GetMapping("/total")
+    public ResponseEntity<Long> obtenerNumeroTotalDePedidos() {
+        long totalPedidos = oPedidoService.obtenerNumeroTotalDePedidos();
+        return new ResponseEntity<>(totalPedidos, HttpStatus.OK);
     }
 
     @PostMapping("/populate/{amount}")
