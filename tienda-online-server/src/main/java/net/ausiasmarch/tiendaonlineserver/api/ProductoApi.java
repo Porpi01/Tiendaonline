@@ -4,6 +4,7 @@ package net.ausiasmarch.tiendaonlineserver.api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,6 +42,12 @@ public class ProductoApi {
     @GetMapping("")
     public ResponseEntity<Page<ProductoEntity>> getPage(Pageable oPageable) {
         return ResponseEntity.ok(oProductoService.getPage(oPageable));
+    }
+
+      @GetMapping("/total")
+    public ResponseEntity<Long> obtenerNumeroTotalDeProductos() {
+        long totalProductosEnStock = oProductoService.obtenerNumeroTotalDeProductos();
+        return new ResponseEntity<>(totalProductosEnStock, HttpStatus.OK);
     }
 
     @PostMapping("/populate/{amount}")

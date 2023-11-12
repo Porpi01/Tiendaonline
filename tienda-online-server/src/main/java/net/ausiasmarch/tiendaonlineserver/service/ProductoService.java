@@ -35,6 +35,10 @@ public class ProductoService {
         return oProductoRepository.save(oProductoEntity);
     }
 
+    public long obtenerNumeroTotalDeProductos() {
+        return oProductoRepository.count();
+    }
+
     public Long delete(Long id) {
         oProductoRepository.deleteById(id);
         return id;
