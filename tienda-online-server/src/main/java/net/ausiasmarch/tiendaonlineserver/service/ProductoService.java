@@ -56,7 +56,7 @@ public Long populate(Integer amount) {
         ProductoEntity producto = new ProductoEntity();
          producto.setPedido(pedidoporDefecto);
          producto.setName("Manzana Golden");
-        
+        producto.setCategoria("Fruta");
          producto.setPrize((float) 2.85);
          producto.setStock(48);
       

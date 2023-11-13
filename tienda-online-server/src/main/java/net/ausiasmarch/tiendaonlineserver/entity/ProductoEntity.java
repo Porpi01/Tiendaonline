@@ -1,7 +1,5 @@
 package net.ausiasmarch.tiendaonlineserver.entity;
 
-
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -19,14 +17,18 @@ import jakarta.validation.constraints.Size;
 public class ProductoEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
+
     @NotNull
     @NotBlank
-    @Size(min=3,max=255)
+    @Size(min = 3, max = 255)
     String name;
 
+    @NotNull
+    @NotBlank
+    @Size(min = 3, max = 255)
+    String categoria;
 
     @NotNull
     @PositiveOrZero
@@ -34,20 +36,19 @@ public class ProductoEntity {
 
     @NotNull
     @PositiveOrZero
-   
+
     int stock;
 
     @ManyToOne
     @JoinColumn(name = "id_pedido")
     private PedidoEntity pedido;
 
-
     public ProductoEntity() {
     }
 
-    public ProductoEntity(String name,  Float prize, int stock) {
+    public ProductoEntity(String name, String categoria, Float prize, int stock) {
         this.name = name;
-      
+
         this.prize = prize;
         this.stock = stock;
     }
@@ -68,6 +69,13 @@ public class ProductoEntity {
         this.name = name;
     }
 
+    public String getCategoria() {
+        return categoria;
+    }
+
+    public void setCategoria(String categoria) {
+        this.categoria = categoria;
+    }
 
     public Float getPrize() {
         return prize;
@@ -92,6 +100,5 @@ public class ProductoEntity {
     public void setPedido(PedidoEntity pedido) {
         this.pedido = pedido;
     }
-    
-    
+
 }
