@@ -5,6 +5,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.transaction.Transactional;
 import net.ausiasmarch.tiendaonlineserver.entity.PedidoEntity;
 import net.ausiasmarch.tiendaonlineserver.entity.ProductoEntity;
 import net.ausiasmarch.tiendaonlineserver.exception.ResourceNotFoundException;
@@ -17,6 +19,15 @@ public class ProductoService {
     ProductoRepository oProductoRepository;
      @Autowired
     PedidoRepository oPedidoRepository;
+    @Autowired
+    SessionService oSessionService;
+    
+    @Autowired
+    HttpServletRequest oHttpServletRequest;
+
+      @Autowired
+    UserService oUserService;
+
 
     public ProductoEntity get(Long id) {
         return oProductoRepository.findById(id)
@@ -40,14 +51,16 @@ public class ProductoService {
     }
 
     public Long delete(Long id) {
+        ProductoEntity oThreadEntityFromDatabase = this.get(id);
+        oSessionService.onlyAdminsOrUsersWithIisOwnData(oThreadEntityFromDatabase.getPedido().getId());
         oProductoRepository.deleteById(id);
         return id;
     }
 
-    public Page<ProductoEntity> getPage(Pageable oPageable) {
+    public Page<ProductoEntity> getPage(Pageable oPageable, Long userId) {
+      oSessionService.onlyAdmins();
         return oProductoRepository.findAll(oPageable);
     }
-
    
 public Long populate(Integer amount) {
     PedidoEntity pedidoporDefecto = oPedidoRepository.findById(1L)
@@ -65,6 +78,16 @@ public Long populate(Integer amount) {
     }
     return amount.longValue();
 }
+
+
+    @Transactional
+    public Long empty() {
+        oSessionService.onlyAdmins();
+        oProductoRepository.deleteAll();
+        oProductoRepository.resetAutoIncrement();
+        oProductoRepository.flush();
+        return oProductoRepository.count();
+    }
 }
 
   

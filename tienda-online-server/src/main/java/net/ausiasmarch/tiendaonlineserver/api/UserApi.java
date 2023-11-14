@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.ausiasmarch.tiendaonlineserver.entity.UserEntity;
 import net.ausiasmarch.tiendaonlineserver.service.UserService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/user")
 public class UserApi {
@@ -28,6 +28,11 @@ public class UserApi {
     @GetMapping("/{id}")
     public ResponseEntity<UserEntity> get(@PathVariable("id") Long id) {
         return ResponseEntity.ok(oUserService.get(id));
+    }
+
+    @GetMapping("/byUsername/{username}")
+    public ResponseEntity<UserEntity> get(@PathVariable("username") String username) {
+        return ResponseEntity.ok(oUserService.getByUsername(username));
     }
 
     @PostMapping("")
@@ -53,6 +58,11 @@ public class UserApi {
     @PostMapping("/populate/{amount}")
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(oUserService.populate(amount));
+    }
+
+    @DeleteMapping("/empty")
+    public ResponseEntity<Long> empty() {
+        return ResponseEntity.ok(oUserService.empty());
     }
 
 

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import net.ausiasmarch.tiendaonlineserver.entity.ProductoEntity;
 import net.ausiasmarch.tiendaonlineserver.service.ProductoService;
 
-@CrossOrigin(origins = "*", maxAge = 3600)
+@CrossOrigin(origins = "*", allowedHeaders = "*", maxAge = 3600)
 @RestController
 @RequestMapping("/producto")
 public class ProductoApi {
@@ -39,11 +39,11 @@ public class ProductoApi {
         return ResponseEntity.ok(oProductoService.delete(id));
     }
 
-    @GetMapping("")
-    public ResponseEntity<Page<ProductoEntity>> getPage(Pageable oPageable) {
-        return ResponseEntity.ok(oProductoService.getPage(oPageable));
+     @GetMapping("")
+    public ResponseEntity<Page<ProductoEntity>> getPage(Pageable oPageable,
+            @RequestParam(value = "user", defaultValue = "0", required = false) Long userId) {
+        return ResponseEntity.ok(oProductoService.getPage(oPageable, userId));
     }
-
       @GetMapping("/total")
     public ResponseEntity<Long> obtenerNumeroTotalDeProductos() {
         long totalProductosEnStock = oProductoService.obtenerNumeroTotalDeProductos();
@@ -53,5 +53,10 @@ public class ProductoApi {
     @PostMapping("/populate/{amount}")
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(oProductoService.populate(amount));
+    }
+
+      @DeleteMapping("/empty")
+    public ResponseEntity<Long> empty() {
+        return ResponseEntity.ok(oProductoService.empty());
     }
 }

@@ -47,7 +47,6 @@ public class UserEntity {
     @NotNull
     @NotBlank
     @Size(min = 6, max = 255)
-
     @Pattern(regexp = "^[a-zA-Z0-9]+$", message = "Username must be alphanumeric")
     private String username;
 
