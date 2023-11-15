@@ -3,6 +3,8 @@ package net.ausiasmarch.tiendaonlineserver.service;
 
 
 
+import java.time.LocalDateTime;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ import jakarta.transaction.Transactional;
 import net.ausiasmarch.tiendaonlineserver.entity.PedidoEntity;
 import net.ausiasmarch.tiendaonlineserver.entity.UserEntity;
 import net.ausiasmarch.tiendaonlineserver.exception.ResourceNotFoundException;
+import net.ausiasmarch.tiendaonlineserver.helper.DataGenerationHelper;
 import net.ausiasmarch.tiendaonlineserver.repository.PedidoRepository;
 import net.ausiasmarch.tiendaonlineserver.repository.UserRepository;
 
@@ -69,21 +72,28 @@ public class PedidoService {
 
    public Long populate(Integer amount) {
 
+
     UserEntity clientePorDefecto = oUserRepository.findById(1L)
             .orElseThrow(() -> new IllegalArgumentException("No se encontró un cliente por defecto con ID 1"));
+
 
     for (int i = 0; i < amount; i++) {
         PedidoEntity pedido = new PedidoEntity();
 
+
         pedido.setUser(clientePorDefecto);
-        pedido.setFecha_pedido("06-11-2023"); 
-        pedido.setEstado_pedido(false); 
+        pedido.setFecha_pedido(LocalDateTime.now());
+        pedido.setFecha_entrega(DataGenerationHelper.getRandomDate(pedido.getFecha_pedido()));
+        pedido.setEstado_pedido(false);
+
 
         oPedidoRepository.save(pedido);
     }
 
+
     return amount.longValue();
 }
+
 
   @Transactional
     public Long empty() {
