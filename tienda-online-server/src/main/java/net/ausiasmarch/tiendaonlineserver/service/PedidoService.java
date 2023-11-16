@@ -1,8 +1,5 @@
 package net.ausiasmarch.tiendaonlineserver.service;
 
-
-
-
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,27 +22,26 @@ public class PedidoService {
     PedidoRepository oPedidoRepository;
     @Autowired
     UserRepository oUserRepository;
-     @Autowired
+    @Autowired
     SessionService oSessionService;
 
     public PedidoEntity get(Long id) {
         return oPedidoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido not found"));
     }
+public Long create(PedidoEntity pedidoEntity) {
+    oSessionService.onlyAdminsOrUsers();
+    pedidoEntity.setId(null);
 
-    public Long create(PedidoEntity pedidoEntity) {
-        oSessionService.onlyAdminsOrUsers();
-        pedidoEntity.setId(null);
-        if(oSessionService.isUser()){
-           pedidoEntity.setUser(oSessionService.getSessionUser());
-           return oPedidoRepository.save(pedidoEntity).getId();
-        }else{
-        return oPedidoRepository.save(pedidoEntity).getId();
-        }
+    if (oSessionService.isUser()) {
+        pedidoEntity.setUser(oSessionService.getSessionUser());
     }
+
+    return oPedidoRepository.save(pedidoEntity).getId();
+}
 
     public PedidoEntity update(PedidoEntity pedidoEntity) {
 
-     PedidoEntity oPedidoEntityFromDatabase = this.get(pedidoEntity.getId());
+        PedidoEntity oPedidoEntityFromDatabase = this.get(pedidoEntity.getId());
         oSessionService.onlyAdminsOrUsersWithIisOwnData(oPedidoEntityFromDatabase.getUser().getId());
         if (oSessionService.isUser()) {
             pedidoEntity.setUser(oSessionService.getSessionUser());
@@ -56,46 +52,42 @@ public class PedidoService {
     }
 
     public long obtenerNumeroTotalDePedidos() {
+        oSessionService.onlyAdmins();
         return oPedidoRepository.count();
     }
 
     public Long delete(Long id) {
-          PedidoEntity oPedidoEntityFromDatabase = this.get(id);
+        PedidoEntity oPedidoEntityFromDatabase = this.get(id);
         oSessionService.onlyAdminsOrUsersWithIisOwnData(oPedidoEntityFromDatabase.getUser().getId());
         oPedidoRepository.deleteById(id);
         return id;
     }
 
     public Page<PedidoEntity> getPage(Pageable oPageable) {
+        oSessionService.onlyAdmins();
         return oPedidoRepository.findAll(oPageable);
     }
 
-   public Long populate(Integer amount) {
+    public Long populate(Integer amount) {
+        oSessionService.onlyAdmins();
+        UserEntity clientePorDefecto = oUserRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró un cliente por defecto con ID 1"));
 
+        for (int i = 0; i < amount; i++) {
+            PedidoEntity pedido = new PedidoEntity();
 
-    UserEntity clientePorDefecto = oUserRepository.findById(1L)
-            .orElseThrow(() -> new IllegalArgumentException("No se encontró un cliente por defecto con ID 1"));
+            pedido.setUser(clientePorDefecto);
+            pedido.setFecha_pedido(LocalDateTime.now());
+            pedido.setFecha_entrega(DataGenerationHelper.getRandomDate(pedido.getFecha_pedido()));
+            pedido.setEstado_pedido(false);
 
+            oPedidoRepository.save(pedido);
+        }
 
-    for (int i = 0; i < amount; i++) {
-        PedidoEntity pedido = new PedidoEntity();
-
-
-        pedido.setUser(clientePorDefecto);
-        pedido.setFecha_pedido(LocalDateTime.now());
-        pedido.setFecha_entrega(DataGenerationHelper.getRandomDate(pedido.getFecha_pedido()));
-        pedido.setEstado_pedido(false);
-
-
-        oPedidoRepository.save(pedido);
+        return amount.longValue();
     }
 
-
-    return amount.longValue();
-}
-
-
-  @Transactional
+    @Transactional
     public Long empty() {
         oSessionService.onlyAdmins();
         oPedidoRepository.deleteAll();

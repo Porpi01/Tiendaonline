@@ -17,17 +17,16 @@ import net.ausiasmarch.tiendaonlineserver.repository.ProductoRepository;
 public class ProductoService {
     @Autowired
     ProductoRepository oProductoRepository;
-     @Autowired
+    @Autowired
     PedidoRepository oPedidoRepository;
     @Autowired
     SessionService oSessionService;
-    
+
     @Autowired
     HttpServletRequest oHttpServletRequest;
 
-      @Autowired
+    @Autowired
     UserService oUserService;
-
 
     public ProductoEntity get(Long id) {
         return oProductoRepository.findById(id)
@@ -35,11 +34,13 @@ public class ProductoService {
     }
 
     public Long create(ProductoEntity oProductoEntity) {
+        oSessionService.onlyAdmins();
         oProductoEntity.setId(null);
         return oProductoRepository.save(oProductoEntity).getId();
     }
 
     public ProductoEntity update(ProductoEntity oProductoEntity) {
+        oSessionService.onlyAdmins();
         if (oProductoEntity.getId() == null) {
             throw new ResourceNotFoundException("Product id cannot be null for an update");
         }
@@ -47,10 +48,13 @@ public class ProductoService {
     }
 
     public long obtenerNumeroTotalDeProductos() {
+        oSessionService.onlyAdmins();
+
         return oProductoRepository.count();
     }
 
     public Long delete(Long id) {
+        oSessionService.onlyAdmins();
         ProductoEntity oThreadEntityFromDatabase = this.get(id);
         oSessionService.onlyAdminsOrUsersWithIisOwnData(oThreadEntityFromDatabase.getPedido().getId());
         oProductoRepository.deleteById(id);
@@ -58,27 +62,26 @@ public class ProductoService {
     }
 
     public Page<ProductoEntity> getPage(Pageable oPageable, Long userId) {
-      oSessionService.onlyAdmins();
+        oSessionService.onlyAdmins();
         return oProductoRepository.findAll(oPageable);
     }
-   
-public Long populate(Integer amount) {
-    PedidoEntity pedidoporDefecto = oPedidoRepository.findById(1L)
-            .orElseThrow(() -> new IllegalArgumentException("No se encontró un pedido por defecto con ID 1"));
-    for (int i = 0; i < amount; i++) {
-        ProductoEntity producto = new ProductoEntity();
-         producto.setPedido(pedidoporDefecto);
-         producto.setName("Manzana Golden");
-        producto.setCategoria("Fruta");
-         producto.setPrize((float) 2.85);
-         producto.setStock(48);
-      
 
-        oProductoRepository.save(producto);
+    public Long populate(Integer amount) {
+        oSessionService.onlyAdmins();
+        PedidoEntity pedidoporDefecto = oPedidoRepository.findById(1L)
+                .orElseThrow(() -> new IllegalArgumentException("No se encontró un pedido por defecto con ID 1"));
+        for (int i = 0; i < amount; i++) {
+            ProductoEntity producto = new ProductoEntity();
+            producto.setPedido(pedidoporDefecto);
+            producto.setName("Manzana Golden");
+            producto.setCategoria("Fruta");
+            producto.setPrize((float) 2.85);
+            producto.setStock(48);
+
+            oProductoRepository.save(producto);
+        }
+        return amount.longValue();
     }
-    return amount.longValue();
-}
-
 
     @Transactional
     public Long empty() {
@@ -89,5 +92,3 @@ public Long populate(Integer amount) {
         return oProductoRepository.count();
     }
 }
-
-  

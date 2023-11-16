@@ -16,7 +16,7 @@ import net.ausiasmarch.tiendaonlineserver.repository.UserRepository;
 @Service
 public class UserService {
 
-     private final String tiendaOnlinePassword = "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e";
+    private final String tiendaOnlinePassword = "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e";
 
     @Autowired
     UserRepository oUserRepository;
@@ -31,12 +31,12 @@ public class UserService {
         return oUserRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("User not found"));
     }
 
-     public UserEntity getByUsername(String username) {
+    public UserEntity getByUsername(String username) {
         return oUserRepository.findByUsername(username)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found by username"));
     }
 
-      public Long create(UserEntity oUserEntity) {
+    public Long create(UserEntity oUserEntity) {
         oSessionService.onlyAdmins();
         oUserEntity.setId(null);
         oUserEntity.setPassword(tiendaOnlinePassword);
@@ -44,7 +44,7 @@ public class UserService {
     }
 
     public UserEntity update(UserEntity oUserEntity) {
-      UserEntity oUserEntityFromDatabase = this.get(oUserEntity.getId());
+        UserEntity oUserEntityFromDatabase = this.get(oUserEntity.getId());
         oSessionService.onlyAdminsOrUsersWithIisOwnData(oUserEntityFromDatabase.getId());
         if (oSessionService.isUser()) {
             oUserEntity.setId(null);
@@ -69,17 +69,17 @@ public class UserService {
         return oUserRepository.findAll(oPageable);
     }
 
-   
     public Long populate(Integer amount) {
-     oSessionService.onlyAdmins();
+        oSessionService.onlyAdmins();
         for (int i = 0; i < amount; i++) {
-            oUserRepository.save(new UserEntity("name" + i, "surname" + i, "lastname" + i, "email" + i + "@ausiasmarch.net", "address" + i, "username" + i,
+            oUserRepository.save(new UserEntity("name" + i, "surname" + i, "lastname" + i,
+                    "email" + i + "@ausiasmarch.net", "address" + i, "username" + i,
                     "e2cac5c5f7e52ab03441bb70e89726ddbd1f6e5b683dde05fb65e0720290179e", true));
         }
         return oUserRepository.count();
     }
 
-  @Transactional
+    @Transactional
     public Long empty() {
         oSessionService.onlyAdmins();
         oUserRepository.deleteAll();
@@ -92,6 +92,5 @@ public class UserService {
         oUserRepository.save(oUserEntity1);
         return oUserRepository.count();
     }
-
 
 }
