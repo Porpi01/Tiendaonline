@@ -11,9 +11,8 @@ import javax.crypto.SecretKey;
 
 public class JWTHelper {
     
-      private static final String SECRET = "tiendaonline_1234567890@@$$";
-    private static final String ISSUER = "TIENDAONLINESERVER";
-
+    private static final String SECRET = "fosforum_ausiasmarch_daw_2023_1234567890@@$$";
+    private static final String ISSUER = "PHOSPHORUM DAW AUSIAS MARCH";
     private static SecretKey secretKey() {
         return Keys.hmacShaKeyFor((SECRET + ISSUER + SECRET).getBytes());
     }
@@ -28,7 +27,7 @@ public class JWTHelper {
                 .setIssuer(ISSUER)
                 .setIssuedAt(currentTime)
                 .setExpiration(expiryTime)
-                .claim("name", username)
+                .claim("username", username)
                 .signWith(secretKey())
                 .compact();
     }
@@ -52,7 +51,7 @@ public class JWTHelper {
                 // throw new JWTException("Error validating JWT: wrong issuer");
             }
 
-            return claims.get("name", String.class);
+            return claims.get("username", String.class);
         } catch (Exception e) {
             return null;
         }
