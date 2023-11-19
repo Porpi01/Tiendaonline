@@ -29,7 +29,7 @@ public class PedidoService {
         return oPedidoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido not found"));
     }
 public Long create(PedidoEntity pedidoEntity) {
-    oSessionService.onlyAdminsOrUsers();
+    oSessionService.onlyAdmins();
     pedidoEntity.setId(null);
 
     if (oSessionService.isUser()) {

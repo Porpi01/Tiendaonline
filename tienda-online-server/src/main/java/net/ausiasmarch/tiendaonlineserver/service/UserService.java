@@ -1,16 +1,13 @@
 package net.ausiasmarch.tiendaonlineserver.service;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
-
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.transaction.Transactional;
+import org.springframework.transaction.annotation.Transactional;
 import net.ausiasmarch.tiendaonlineserver.entity.UserEntity;
 import net.ausiasmarch.tiendaonlineserver.exception.ResourceNotFoundException;
-
 import net.ausiasmarch.tiendaonlineserver.repository.UserRepository;
 
 @Service
@@ -43,21 +40,28 @@ public class UserService {
         return oUserRepository.save(oUserEntity).getId();
     }
 
-    public UserEntity update(UserEntity oUserEntity) {
-        UserEntity oUserEntityFromDatabase = this.get(oUserEntity.getId());
-        oSessionService.onlyAdminsOrUsersWithIisOwnData(oUserEntityFromDatabase.getId());
-        if (oSessionService.isUser()) {
-            oUserEntity.setId(null);
-            oUserEntity.setRole(oUserEntityFromDatabase.getRole());
-            oUserEntity.setPassword(tiendaOnlinePassword);
-            return oUserRepository.save(oUserEntity);
+    public UserEntity update(UserEntity oUserEntityToSet) {
+        UserEntity oUserEntityFromDatabase = this.get(oUserEntityToSet.getId());
+        
+        if (oUserEntityFromDatabase != null) {
+            oSessionService.onlyAdminsOrUsersWithIisOwnData(oUserEntityFromDatabase.getId());
+    
+            if (oSessionService.isUser()) {
+               
+                oUserEntityToSet.setId(oUserEntityFromDatabase.getId());
+                oUserEntityToSet.setRole(oUserEntityFromDatabase.getRole());
+                oUserEntityToSet.setPassword(tiendaOnlinePassword);
+                return oUserRepository.save(oUserEntityToSet);
+            } else {
+               
+                oUserEntityToSet.setId(oUserEntityFromDatabase.getId());
+                oUserEntityToSet.setPassword(tiendaOnlinePassword);
+                return oUserRepository.save(oUserEntityToSet);
+            }
         } else {
-            oUserEntity.setId(null);
-            oUserEntity.setPassword(tiendaOnlinePassword);
-            return oUserRepository.save(oUserEntity);
+            return null; 
         }
     }
-
     public Long delete(Long id) {
         oSessionService.onlyAdmins();
         oUserRepository.deleteById(id);
@@ -84,11 +88,11 @@ public class UserService {
         oSessionService.onlyAdmins();
         oUserRepository.deleteAll();
         oUserRepository.resetAutoIncrement();
-        UserEntity oUserEntity1 = new UserEntity(1L, "Pedro", "Picapiedra", "Roca",
-                "pedropicapiedra@ausiasmarch.net", "Calle San Rafael ", "pedropicapiedra", tiendaOnlinePassword, false);
+        UserEntity oUserEntity1 = new UserEntity(1L, "Kira", "Chan", "",
+                "kira@gmail.com", "santa Ana 16 4A ", "kirachan", tiendaOnlinePassword, false);
         oUserRepository.save(oUserEntity1);
-        oUserEntity1 = new UserEntity(2L, "Pablo", "Mármol", "Granito", "pablomarmol@ausiasmarch.net", "Calle San José",
-                "pablomarmol", tiendaOnlinePassword, true);
+        oUserEntity1 = new UserEntity(2L, "Silvia", "Alcañiz", "Puig", "moni5@gmail.com", "santa Catalina 16 4A",
+                "monichan", tiendaOnlinePassword, true);
         oUserRepository.save(oUserEntity1);
         return oUserRepository.count();
     }

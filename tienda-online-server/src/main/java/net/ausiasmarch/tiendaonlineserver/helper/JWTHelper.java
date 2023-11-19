@@ -20,14 +20,14 @@ public class JWTHelper {
     public static String generateJWT(String username) {
 
         Date currentTime = Date.from(Instant.now());
-        Date expiryTime = Date.from(Instant.now().plus(Duration.ofSeconds(1500)));
+        Date expiryTime = Date.from(Instant.now().plus(Duration.ofSeconds(3600)));
 
         return Jwts.builder()
                 .setId(UUID.randomUUID().toString())
                 .setIssuer(ISSUER)
                 .setIssuedAt(currentTime)
                 .setExpiration(expiryTime)
-                .claim("username", username)
+                .claim("name", username)
                 .signWith(secretKey())
                 .compact();
     }
@@ -51,7 +51,7 @@ public class JWTHelper {
                 // throw new JWTException("Error validating JWT: wrong issuer");
             }
 
-            return claims.get("username", String.class);
+            return claims.get("name", String.class);
         } catch (Exception e) {
             return null;
         }

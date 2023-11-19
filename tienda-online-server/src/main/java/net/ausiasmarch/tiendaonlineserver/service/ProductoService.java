@@ -39,6 +39,7 @@ public class ProductoService {
         return oProductoRepository.save(oProductoEntity).getId();
     }
 
+
     public ProductoEntity update(ProductoEntity oProductoEntity) {
         oSessionService.onlyAdmins();
         if (oProductoEntity.getId() == null) {
