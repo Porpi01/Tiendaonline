@@ -1,5 +1,8 @@
 package net.ausiasmarch.tiendaonlineserver.service;
 
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -50,10 +53,10 @@ public class ProductoService {
 
     public long obtenerNumeroTotalDeProductos() {
         oSessionService.onlyAdmins();
-
         return oProductoRepository.count();
     }
 
+  
     public Long delete(Long id) {
         oSessionService.onlyAdmins();
         ProductoEntity oThreadEntityFromDatabase = this.get(id);
@@ -63,7 +66,6 @@ public class ProductoService {
     }
 
     public Page<ProductoEntity> getPage(Pageable oPageable, Long userId) {
-        oSessionService.onlyAdmins();
         return oProductoRepository.findAll(oPageable);
     }
 
