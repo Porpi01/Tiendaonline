@@ -14,7 +14,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long>{
 
     Optional<UserEntity> findByUsernameAndPassword(String username, String password);
 
-      @Modifying
+    @Modifying
     @Query(value = "ALTER TABLE user AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
 }
