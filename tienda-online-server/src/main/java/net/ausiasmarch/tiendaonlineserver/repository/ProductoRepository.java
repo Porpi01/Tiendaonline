@@ -13,6 +13,6 @@ public interface ProductoRepository extends JpaRepository<ProductoEntity, Long>{
 
 
           @Modifying
-    @Query(value = "ALTER TABLE thread AUTO_INCREMENT = 1", nativeQuery = true)
+    @Query(value = "ALTER TABLE producto AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
 }

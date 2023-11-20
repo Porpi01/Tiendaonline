@@ -13,7 +13,7 @@ public interface PedidoRepository extends JpaRepository<PedidoEntity, Long>{
   
 
        @Modifying
-    @Query(value = "ALTER TABLE thread AUTO_INCREMENT = 1", nativeQuery = true)
+    @Query(value = "ALTER TABLE pedido AUTO_INCREMENT = 1", nativeQuery = true)
     void resetAutoIncrement();
     
 }
