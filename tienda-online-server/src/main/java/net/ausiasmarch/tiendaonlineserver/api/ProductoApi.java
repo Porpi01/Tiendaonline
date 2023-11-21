@@ -47,11 +47,7 @@ public class ProductoApi {
             @RequestParam(value = "user", defaultValue = "0", required = false) Long userId) {
         return ResponseEntity.ok(oProductoService.getPage(oPageable, userId));
     }
-      @GetMapping("/total")
-    public ResponseEntity<Long> obtenerNumeroTotalDeProductos() {
-        long totalProductosEnStock = oProductoService.obtenerNumeroTotalDeProductos();
-        return new ResponseEntity<>(totalProductosEnStock, HttpStatus.OK);
-    }
+   
 
     @PostMapping("/populate/{amount}")
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {

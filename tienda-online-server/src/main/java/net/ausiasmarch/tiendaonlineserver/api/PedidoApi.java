@@ -1,7 +1,5 @@
 package net.ausiasmarch.tiendaonlineserver.api;
 
-
-
 import java.time.LocalDateTime;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,14 +36,12 @@ public class PedidoApi {
     @PostMapping("")
     public ResponseEntity<Long> create(@RequestBody PedidoEntity oPedidoEntity) {
 
-
         oPedidoEntity.setFecha_pedido(LocalDateTime.now());
         LocalDateTime fechaEntrega = DataGenerationHelper.getRandomDate(oPedidoEntity.getFecha_pedido());
         oPedidoEntity.setFecha_entrega(fechaEntrega);
         Long idPedidoCreado = oPedidoService.create(oPedidoEntity);
         return ResponseEntity.ok(idPedidoCreado);
     }
-
 
     @PutMapping("")
     public ResponseEntity<PedidoEntity> update(@RequestBody PedidoEntity oPedidoEntity) {
@@ -62,18 +58,11 @@ public class PedidoApi {
         return ResponseEntity.ok(oPedidoService.getPage(oPageable));
     }
 
-    @GetMapping("/total")
-    public ResponseEntity<Long> obtenerNumeroTotalDePedidos() {
-        long totalPedidos = oPedidoService.obtenerNumeroTotalDePedidos();
-        return new ResponseEntity<>(totalPedidos, HttpStatus.OK);
-    }
-
     @PostMapping("/populate/{amount}")
     public ResponseEntity<Long> populate(@PathVariable("amount") Integer amount) {
         return ResponseEntity.ok(oPedidoService.populate(amount));
     }
 
-    
     @DeleteMapping("/empty")
     public ResponseEntity<Long> empty() {
         return ResponseEntity.ok(oPedidoService.empty());

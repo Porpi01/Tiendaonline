@@ -51,10 +51,7 @@ public Long create(PedidoEntity pedidoEntity) {
         }
     }
 
-    public long obtenerNumeroTotalDePedidos() {
-        oSessionService.onlyAdmins();
-        return oPedidoRepository.count();
-    }
+  
 
     public Long delete(Long id) {
         PedidoEntity oPedidoEntityFromDatabase = this.get(id);
