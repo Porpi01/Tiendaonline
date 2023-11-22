@@ -10,16 +10,16 @@ import org.springframework.data.jpa.repository.Query;
 
 import net.ausiasmarch.tiendaonlineserver.entity.UserEntity;
 
-public interface UserRepository extends JpaRepository<UserEntity, Long>{
-    
-      Optional<UserEntity> findByUsername(String username);
+public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
-    Optional<UserEntity> findByUsernameAndPassword(String username, String password);
+  Optional<UserEntity> findByUsername(String username);
 
-      @Query(value = "SELECT u.*,count(p.id) FROM user u, pedido p WHERE u.id = p.id_cliente GROUP BY u.id ORDER BY COUNT(u.id) desc", nativeQuery = true)
-    Page<UserEntity> findUsersByPedidosNumberDescFilter(Pageable pageable);
+  Optional<UserEntity> findByUsernameAndPassword(String username, String password);
 
-    @Modifying
-    @Query(value = "ALTER TABLE user AUTO_INCREMENT = 1", nativeQuery = true)
-    void resetAutoIncrement();
+  @Query(value = "SELECT u.*,count(p.id) FROM user u, pedido p WHERE u.id = p.id_cliente GROUP BY u.id ORDER BY COUNT(u.id) desc", nativeQuery = true)
+  Page<UserEntity> findUsersByPedidosNumberDescFilter(Pageable pageable);
+
+  @Modifying
+  @Query(value = "ALTER TABLE user AUTO_INCREMENT = 1", nativeQuery = true)
+  void resetAutoIncrement();
 }

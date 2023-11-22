@@ -3,8 +3,8 @@ package net.ausiasmarch.tiendaonlineserver.bean;
 import java.util.Date;
 
 public class ErrorResponseBean {
-    
-  private Date timestamp;
+
+    private Date timestamp;
     private String status;
     private String message;
     private String details;
@@ -47,6 +47,5 @@ public class ErrorResponseBean {
     public void setDetails(String details) {
         this.details = details;
     }
-
 
 }

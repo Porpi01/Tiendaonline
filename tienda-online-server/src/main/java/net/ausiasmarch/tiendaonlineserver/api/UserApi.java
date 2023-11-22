@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import net.ausiasmarch.tiendaonlineserver.entity.UserEntity;
 import net.ausiasmarch.tiendaonlineserver.service.UserService;
 
@@ -64,7 +63,5 @@ public class UserApi {
     public ResponseEntity<Long> empty() {
         return ResponseEntity.ok(oUserService.empty());
     }
-
-
 
 }

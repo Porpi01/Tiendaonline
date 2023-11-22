@@ -1,8 +1,8 @@
 package net.ausiasmarch.tiendaonlineserver.service;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,26 +42,27 @@ public class UserService {
 
     public UserEntity update(UserEntity oUserEntityToSet) {
         UserEntity oUserEntityFromDatabase = this.get(oUserEntityToSet.getId());
-        
+
         if (oUserEntityFromDatabase != null) {
             oSessionService.onlyAdminsOrUsersWithIisOwnData(oUserEntityFromDatabase.getId());
-    
+
             if (oSessionService.isUser()) {
-               
+
                 oUserEntityToSet.setId(oUserEntityFromDatabase.getId());
                 oUserEntityToSet.setRole(oUserEntityFromDatabase.getRole());
                 oUserEntityToSet.setPassword(tiendaOnlinePassword);
                 return oUserRepository.save(oUserEntityToSet);
             } else {
-               
+
                 oUserEntityToSet.setId(oUserEntityFromDatabase.getId());
                 oUserEntityToSet.setPassword(tiendaOnlinePassword);
                 return oUserRepository.save(oUserEntityToSet);
             }
         } else {
-            return null; 
+            return null;
         }
     }
+
     public Long delete(Long id) {
         oSessionService.onlyAdmins();
         oUserRepository.deleteById(id);

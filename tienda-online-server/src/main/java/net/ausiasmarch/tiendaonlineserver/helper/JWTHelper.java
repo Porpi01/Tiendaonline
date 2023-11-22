@@ -1,4 +1,5 @@
 package net.ausiasmarch.tiendaonlineserver.helper;
+
 import io.jsonwebtoken.security.Keys;
 import java.time.Duration;
 import java.time.Instant;
@@ -10,9 +11,10 @@ import io.jsonwebtoken.Jwts;
 import javax.crypto.SecretKey;
 
 public class JWTHelper {
-    
+
     private static final String SECRET = "fosforum_ausiasmarch_daw_2023_1234567890@@$$";
     private static final String ISSUER = "PHOSPHORUM DAW AUSIAS MARCH";
+
     private static SecretKey secretKey() {
         return Keys.hmacShaKeyFor((SECRET + ISSUER + SECRET).getBytes());
     }

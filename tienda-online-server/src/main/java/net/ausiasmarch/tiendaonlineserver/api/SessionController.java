@@ -1,5 +1,4 @@
 package net.ausiasmarch.tiendaonlineserver.api;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -7,7 +6,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
 import net.ausiasmarch.tiendaonlineserver.bean.UserBean;
 import net.ausiasmarch.tiendaonlineserver.service.SessionService;
 
@@ -15,8 +13,8 @@ import net.ausiasmarch.tiendaonlineserver.service.SessionService;
 @RestController
 @RequestMapping("/session")
 public class SessionController {
-  
-      @Autowired
+
+    @Autowired
     SessionService oSessionService;
 
     @PostMapping()

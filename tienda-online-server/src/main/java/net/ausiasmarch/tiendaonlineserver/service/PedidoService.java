@@ -28,16 +28,17 @@ public class PedidoService {
     public PedidoEntity get(Long id) {
         return oPedidoRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Pedido not found"));
     }
-public Long create(PedidoEntity pedidoEntity) {
-    oSessionService.onlyAdmins();
-    pedidoEntity.setId(null);
 
-    if (oSessionService.isUser()) {
-        pedidoEntity.setUser(oSessionService.getSessionUser());
+    public Long create(PedidoEntity pedidoEntity) {
+        oSessionService.onlyAdmins();
+        pedidoEntity.setId(null);
+
+        if (oSessionService.isUser()) {
+            pedidoEntity.setUser(oSessionService.getSessionUser());
+        }
+
+        return oPedidoRepository.save(pedidoEntity).getId();
     }
-
-    return oPedidoRepository.save(pedidoEntity).getId();
-}
 
     public PedidoEntity update(PedidoEntity pedidoEntity) {
 
@@ -50,8 +51,6 @@ public Long create(PedidoEntity pedidoEntity) {
             return oPedidoRepository.save(pedidoEntity);
         }
     }
-
-  
 
     public Long delete(Long id) {
         PedidoEntity oPedidoEntityFromDatabase = this.get(id);

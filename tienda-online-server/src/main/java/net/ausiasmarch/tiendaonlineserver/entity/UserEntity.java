@@ -2,9 +2,7 @@ package net.ausiasmarch.tiendaonlineserver.entity;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import com.fasterxml.jackson.annotation.JsonProperty;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -61,10 +59,9 @@ public class UserEntity {
     @OneToMany(mappedBy = "user", fetch = jakarta.persistence.FetchType.LAZY)
     private List<PedidoEntity> pedidos;
 
-
     public UserEntity() {
         pedidos = new ArrayList<>();
-        
+
     }
 
     public UserEntity(Long id, String name, String surname, String lastname, String email, String address,
@@ -170,8 +167,6 @@ public class UserEntity {
     public void setRole(Boolean role) {
         this.role = role;
     }
-
-
 
     public int getPedidos() {
         return pedidos.size();

@@ -15,9 +15,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import net.ausiasmarch.tiendaonlineserver.helper.JWTHelper;
 
 @Component
-public class JWTFilter implements Filter{
-    
-  @Override
+public class JWTFilter implements Filter {
+
+    @Override
     public void init(FilterConfig filterConfig) throws ServletException {
     }
 
@@ -47,7 +47,5 @@ public class JWTFilter implements Filter{
     @Override
     public void destroy() {
     }
-
-
 
 }

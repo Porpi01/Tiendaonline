@@ -13,8 +13,8 @@ import net.ausiasmarch.tiendaonlineserver.repository.UserRepository;
 
 @Service
 public class SessionService {
-    
-   @Autowired
+
+    @Autowired
     UserRepository oUserRepository;
 
     @Autowired
@@ -26,7 +26,7 @@ public class SessionService {
         return JWTHelper.generateJWT(oUserBean.getUsername());
     }
 
-    public String getSessionUsername() {        
+    public String getSessionUsername() {
         if (oHttpServletRequest.getAttribute("username") instanceof String) {
             return oHttpServletRequest.getAttribute("username").toString();
         } else {
@@ -36,7 +36,7 @@ public class SessionService {
 
     public UserEntity getSessionUser() {
         if (this.getSessionUsername() != null) {
-            return oUserRepository.findByUsername(this.getSessionUsername()).orElse(null);    
+            return oUserRepository.findByUsername(this.getSessionUsername()).orElse(null);
         } else {
             return null;
         }
@@ -112,6 +112,5 @@ public class SessionService {
             throw new UnauthorizedException("Only admins or users can do this");
         }
     }
-
 
 }
